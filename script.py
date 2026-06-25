@@ -11,7 +11,13 @@ def scrape():
     response = requests.get(URL)
     soup = BeautifulSoup(response.text, "html.parser")
 
-    table = soup.find("table")
+    tables = soup.find_all("table")
+
+    if not tables:
+        print("No tables found")
+        return
+
+    table = tables[0]  # uzmi prvu tablicu
     rows = table.find_all("tr")
 
     data = []
@@ -22,6 +28,10 @@ def scrape():
         if len(cols) == 2:
             data.append([today, cols[0].text.strip(), cols[1].text.strip()])
 
+    if len(data) == 0:
+        print("No data extracted")
+        return
+
     df_new = pd.DataFrame(data, columns=["Datum", "Postaja", "Temperatura"])
 
     file = "data.csv"
@@ -29,9 +39,8 @@ def scrape():
     if os.path.exists(file):
         df_old = pd.read_csv(file)
 
-        # NE DUPLIRAJ DATUM
         if today in df_old["Datum"].values:
-            print("Data already exists for today")
+            print("Data already exists")
             return
 
         df = pd.concat([df_old, df_new], ignore_index=True)
@@ -39,6 +48,6 @@ def scrape():
         df = df_new
 
     df.to_csv(file, index=False)
+    print("Data saved ✅")
 
 scrape()
-``
