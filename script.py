@@ -24,17 +24,16 @@ def scrape():
 
     for row in rows[1:]:
         cols = row.find_all("td")
+
         if len(cols) == 2:
             try:
                 temp_value = float(cols[1].text.strip())
             except:
                 continue
 
-            data.append([
-                today,
-                cols[0].text.strip(),
-                temp_value
-            ])
+            station = cols[0].text.strip()
+
+            data.append([today, station, temp_value])
 
     if len(data) == 0:
         print("No data extracted")
@@ -47,7 +46,7 @@ def scrape():
     if os.path.exists(file):
         df_old = pd.read_excel(file)
 
-        # spriječi duplikat
+        # spriječi duplikat dana
         if today in df_old["Datum"].astype(str).values:
             print("Data already exists for today")
             return
@@ -58,6 +57,6 @@ def scrape():
 
     df.to_excel(file, index=False)
 
-    print("✅ Data saved to Excel")
+    print("✅ Data saved to Excel file")
 
 scrape()
