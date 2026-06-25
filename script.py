@@ -34,10 +34,10 @@ def scrape():
 
     df_new = pd.DataFrame(data, columns=["Datum", "Postaja", "Temperatura"])
 
-    file = "data.csv"
+    file = "data.xlsx"
 
     if os.path.exists(file):
-        df_old = pd.read_csv(file)
+        df_old = pd.read_excel(file)
 
         if today in df_old["Datum"].values:
             print("Data already exists")
@@ -47,7 +47,7 @@ def scrape():
     else:
         df = df_new
 
-    df.to_csv(file, index=False)
+    df.to_excel(file, index=False)
     print("Data saved ✅")
 
 scrape()
