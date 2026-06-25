@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install libraries
-        run: pip install requests beautifulsoup4 pandas openpyx1
+        run: pip install requests beautifulsoup4 pandas openpyxl
 
       - name: Run script
         run: python script.py
