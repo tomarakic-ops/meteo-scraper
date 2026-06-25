@@ -16,7 +16,7 @@ def scrape():
         print("No tables found")
         return
 
-    table = tables[0]  # uzmi prvu tablicu
+    table = tables[0]
     rows = table.find_all("tr")
 
     data = []
@@ -25,7 +25,16 @@ def scrape():
     for row in rows[1:]:
         cols = row.find_all("td")
         if len(cols) == 2:
-            data.append([today, cols[0].text.strip(), cols[1].text.strip()])
+            try:
+                temp_value = float(cols[1].text.strip())
+            except:
+                continue
+
+            data.append([
+                today,
+                cols[0].text.strip(),
+                temp_value
+            ])
 
     if len(data) == 0:
         print("No data extracted")
@@ -38,8 +47,9 @@ def scrape():
     if os.path.exists(file):
         df_old = pd.read_excel(file)
 
-        if today in df_old["Datum"].values:
-            print("Data already exists")
+        # spriječi duplikat
+        if today in df_old["Datum"].astype(str).values:
+            print("Data already exists for today")
             return
 
         df = pd.concat([df_old, df_new], ignore_index=True)
@@ -47,6 +57,7 @@ def scrape():
         df = df_new
 
     df.to_excel(file, index=False)
-    print("Data saved ✅")
+
+    print("✅ Data saved to Excel")
 
 scrape()
