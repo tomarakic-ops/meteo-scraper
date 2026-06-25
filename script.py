@@ -1,4 +1,3 @@
-
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -34,18 +33,20 @@ def scrape():
 
     df_new = pd.DataFrame(data, columns=["Datum", "Postaja", "Temperatura"])
 
-    
-file = "data.xlsx"
+    file = "data.xlsx"
 
-if os.path.exists(file):
-    df_old = pd.read_excel(file)
+    if os.path.exists(file):
+        df_old = pd.read_excel(file)
 
-    if today in df_old["Datum"].values:
-        print("Data already exists")
-        return
+        if today in df_old["Datum"].values:
+            print("Data already exists")
+            return
 
-    df = pd.concat([df_old, df_new], ignore_index=True)
-else:
-    df = df_new
+        df = pd.concat([df_old, df_new], ignore_index=True)
+    else:
+        df = df_new
 
-df.to_excel(file, index=False)
+    df.to_excel(file, index=False)
+    print("Data saved ✅")
+
+scrape()
