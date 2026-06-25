@@ -49,4 +49,3 @@ else:
     df = df_new
 
 df.to_excel(file, index=False)
-``
