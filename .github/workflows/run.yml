@@ -1,10 +1,12 @@
-
 name: Run scraper daily
 
 on:
   schedule:
-    - cron: '0 5 * * *'   # svaki dan u 05:00 UTC (~07:00 lokalno)
+    - cron: '0 5 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-script:
@@ -26,7 +28,7 @@ jobs:
         run: python script.py
 
       - name: Commit changes
-  uses: stefanzweifel/git-auto-commit-action@v5
-  with:
-    commit_message: "update data"
-    file_pattern: data.xlsx
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "update data"
+          file_pattern: data.xlsx
