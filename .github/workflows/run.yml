@@ -25,22 +25,8 @@ jobs:
       - name: Run script
         run: python script.py
 
-      - 
-
-name: Commit changes
-  run: |
-    git config --global user.name 'bot'
-    git config --global user.email 'bot@example.com'
-
-    # potpuno resetaj stanje na remote
-    git fetch origin
-    git reset --hard origin/main
-
-    # dodaj novi file
-    git add data.xlsx
-
-    # commit ako ima promjena
-    git diff --cached --quiet || git commit -m "update data"
-
-    # push bez konflikta
-    git push origin main
+      - name: Commit changes
+  uses: stefanzweifel/git-auto-commit-action@v5
+  with:
+    commit_message: "update data"
+    file_pattern: data.xlsx
