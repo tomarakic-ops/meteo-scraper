@@ -25,11 +25,19 @@ jobs:
       - name: Run script
         run: python script.py
 
-      - name: Commit changes
-        run: |
-          git config --global user.name 'bot'
-          git config --global user.email 'bot@example.com'
-          git add data.xlsx
-          git commit -m "update data" || echo "no changes"
-          git pull --rebase
-          git push
+      - 
+name: Commit changes
+  run: |
+    git config --global user.name 'bot'
+    git config --global user.email 'bot@example.com'
+
+    git add data.xlsx
+
+    # commit samo ako ima promjena
+    git diff --cached --quiet || git commit -m "update data"
+
+    # sync sa remote i force push
+    git fetch origin main
+    git rebase origin/main
+
+    git push origin HEAD:main --force-with-lease
